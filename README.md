@@ -1,0 +1,39 @@
+# Totally Awesome CI/CD Signing Tool Must Use 2026 (仮)
+
+Your release just rolled off the build line, warm and shiny. But how will the world know it's *really* yours and not a sneaky look-alike swapped in somewhere between your pipeline and their download button? 
+
+**Totally Awesome CI/CD Signing Tool Must Use 2026 (仮)** stamps every release with a digital signature (RSA-PSS, ECDSA P-256 or Ed25519, pick your poison) and checks it against a list of keys *you* chose to trust. One
+flipped byte, one unknown key, one suspicious version number, and **Totally Awesome CI/CD Signing Tool Must Use 2026 (仮)** says no, loudly, with a non-zero exit code your pipeline can't ignore. It ships as a container, so your CI just pulls it and gets signing. 
+
+P.S. We are open to suggestion on the software name, hence the (仮) meaning temporary :D
+
+## Setup and running locally
+
+Requires Python 3.12 or newer.
+
+```sh
+python3 -m venv .venv          # create an isolated environment for this project
+source .venv/bin/activate      # use it in this shell (Windows: .venv\Scripts\activate)
+pip install -e ".[dev]"        # install tacstmu + its dependencies + dev tools
+```
+
+What `pip install -e ".[dev]"` does:
+
+- `.` installs the project in the current folder, as described by `pyproject.toml`
+  (including its dependency, `cryptography`).
+- `-e` (editable) links the installed package to the source in `src/`, so code changes take
+  effect immediately without reinstalling.
+- `[dev]` also installs the optional development tools listed under `dev` (currently `pytest`).
+
+Run the tool, either through the installed command or as a module:
+
+```sh
+tacstmu --help
+python -m tacstmu --help
+```
+
+Run the tests:
+
+```sh
+pytest
+```

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tacstmu"
+dynamic = ["version"]
+description = "Sign and verify software releases with RSA-PSS, ECDSA P-256 and Ed25519"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cryptography==50.0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.2.0",
+]
+
+[project.scripts]
+tacstmu = "tacstmu.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "tacstmu.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
