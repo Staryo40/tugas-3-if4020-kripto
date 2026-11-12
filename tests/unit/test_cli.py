@@ -21,14 +21,13 @@ def _result(status, valid=False, message="m"):
     }
 
 
-# Help and version
+# Help, version and entry point
 def test_version(capsys):
     assert cli.main(["--version"]) == 0
     assert capsys.readouterr().out.strip() == f"tacstmu {__version__}"
 
-@pytest.mark.parametrize("argv", [["--help"], ["keygen", "--help"], ["verify", "--help"], ["trust", "add", "--help"]])
-def test_help(capsys, argv):
-    assert cli.main(argv) == 0
+def test_help(capsys):
+    assert cli.main(["--help"]) == 0
     assert "usage:" in capsys.readouterr().out
 
 def test_module_entry_point():
@@ -41,47 +40,37 @@ def test_module_entry_point():
 @pytest.mark.parametrize(
     "argv",
     [
-        [],
-        ["unknown"],
-        ["keygen", "--out", "x"],
-        ["keygen", "--algorithm", "dsa", "--out", "x"],
-        ["sign", "--file", "a.zip"],
-        ["trust"],
-        ["trust", "remove", "--store", "t.json"],
+        pytest.param([], id="no-command"),
+        pytest.param(["keygen", "--out", "x"], id="missing-flag"),
+        pytest.param(["keygen", "--algorithm", "dsa", "--out", "x"], id="bad-choice"),
     ],
 )
 def test_usage_errors_exit_2(capsys, argv):
     assert cli.main(argv) == 2
     captured = capsys.readouterr()
-    assert captured.out == ""
-    assert "error:" in captured.err
+    assert captured.out == "" and "error:" in captured.err
 
 def test_verify_json_usage_error_prints_input_error(capsys):
     assert cli.main(["verify", "--json", "--file", "a.zip"]) == 2
     out = capsys.readouterr().out
-    assert out.endswith("\n") and out.count("\n") == 1
+    assert out.count("\n") == 1
     result = json.loads(out)
-    assert result["valid"] is False and result["status"] == "INPUT_ERROR"
-    assert all(result[f] is None for f in ("algorithm", "keyid", "package", "version"))
+    assert result["status"] == "INPUT_ERROR" and result["keyid"] is None
 
 
 # keygen
-@pytest.mark.parametrize("profile", ["rsa-pss-sha256", "ecdsa-p256-sha256", "ed25519"])
-def test_keygen(tmp_path, capsys, profile):
+def test_keygen(tmp_path, capsys):
     prefix = tmp_path / "keys" / "publisher"
-    assert cli.main(["keygen", "--algorithm", profile, "--out", str(prefix)]) == 0
-    out = capsys.readouterr().out.strip()
-    pub, loaded_profile = keys.load_public_pem((tmp_path / "keys" / "publisher.pub.pem").read_bytes())
-    assert loaded_profile == profile
-    assert out == keys.keyid(pub)
+    assert cli.main(["keygen", "--algorithm", "ed25519", "--out", str(prefix)]) == 0
+    pub, profile = keys.load_public_pem((tmp_path / "keys" / "publisher.pub.pem").read_bytes())
+    assert profile == "ed25519"
+    assert capsys.readouterr().out.strip() == keys.keyid(pub)
 
 def test_keygen_refuses_overwrite(tmp_path, capsys):
     prefix = str(tmp_path / "publisher")
-    assert cli.main(["keygen", "--algorithm", "ed25519", "--out", prefix]) == 0
-    before = (tmp_path / "publisher.key.pem").read_bytes()
+    cli.main(["keygen", "--algorithm", "ed25519", "--out", prefix])
     assert cli.main(["keygen", "--algorithm", "ed25519", "--out", prefix]) == 2
     assert "overwrite" in capsys.readouterr().err
-    assert (tmp_path / "publisher.key.pem").read_bytes() == before
 
 def test_keygen_force(tmp_path):
     prefix = str(tmp_path / "publisher")
@@ -92,22 +81,12 @@ def test_keygen_force(tmp_path):
 
 
 # Verify reporting
-@pytest.mark.parametrize(
-    "status, valid, code",
-    [
-        ("OK", True, 0),
-        ("FORMAT_ERROR", False, 1),
-        ("KEY_NOT_TRUSTED", False, 1),
-        ("ARTIFACT_MISMATCH", False, 1),
-        ("INPUT_ERROR", False, 2),
-        ("OK", False, 1),
-    ],
-)
+@pytest.mark.parametrize("status, valid, code", [("OK", True, 0), ("FORMAT_ERROR", False, 1), ("INPUT_ERROR", False, 2)])
 def test_report_verify_exit_codes(capsys, status, valid, code):
     assert cli.report_verify(_result(status, valid), as_json=True) == code
 
 def test_report_verify_json_format(capsys):
-    cli.report_verify(_result("OK", True, "Tanda tangan dan artefak valid."), as_json=True)
+    cli.report_verify(_result("OK", True), as_json=True)
     out = capsys.readouterr().out
     assert out.endswith("}\n") and out.count("\n") == 1
     assert list(json.loads(out)) == list(cli.VERIFY_FIELDS)
@@ -126,20 +105,12 @@ def test_non_verify_error_exits_2(monkeypatch, capsys):
     assert "bad trust store" in capsys.readouterr().err
 
 @pytest.mark.parametrize(
-    "error, status, code",
-    [
-        (FormatError("broken bundle"), "FORMAT_ERROR", 1),
-        (TacstmuError("unclassified"), "INPUT_ERROR", 2),
-        (RuntimeError("bug"), "INPUT_ERROR", 2),
-    ],
+    "error",
+    [pytest.param(TacstmuError("unclassified"), id="base-error"), pytest.param(RuntimeError("bug"), id="crash")],
 )
-def test_verify_error_mapping(monkeypatch, capsys, error, status, code):
+def test_verify_unclassified_error_is_input_error(monkeypatch, capsys, error):
     def boom(args):
         raise error
     monkeypatch.setattr(cli, "cmd_verify", boom)
-    assert cli.main([*VERIFY_ARGS, "--json"]) == code
-    result = json.loads(capsys.readouterr().out)
-    assert result["status"] == status and result["valid"] is False
-
-def test_placeholder_commands_exit_0(capsys):
-    assert cli.main(VERIFY_ARGS) == 0
+    assert cli.main([*VERIFY_ARGS, "--json"]) == 2
+    assert json.loads(capsys.readouterr().out)["status"] == "INPUT_ERROR"

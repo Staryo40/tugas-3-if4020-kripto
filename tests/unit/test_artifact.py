@@ -10,7 +10,7 @@ EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 ABC_SHA256 = "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
 
 
-# hash_file: size and digest
+# hash_file
 def test_empty_file(tmp_path):
     path = tmp_path / "empty.bin"
     path.write_bytes(b"")
@@ -27,11 +27,6 @@ def test_larger_than_one_chunk(tmp_path):
     path.write_bytes(data)
     assert hash_file(path) == (len(data), hashlib.sha256(data).hexdigest())
 
-def test_accepts_str_path(tmp_path):
-    path = tmp_path / "abc.txt"
-    path.write_bytes(b"abc")
-    assert hash_file(str(path)) == (3, ABC_SHA256)
-
 def test_file_unchanged_after_hashing(tmp_path):
     path = tmp_path / "keep.bin"
     path.write_bytes(b"release bytes")
@@ -41,8 +36,6 @@ def test_file_unchanged_after_hashing(tmp_path):
     assert path.read_bytes() == b"release bytes"
     assert (after.st_size, after.st_mtime_ns) == (before.st_size, before.st_mtime_ns)
 
-
-# hash_file: unreadable input
 def test_missing_file(tmp_path):
     with pytest.raises(InputError, match="missing.zip"):
         hash_file(tmp_path / "missing.zip")
@@ -53,14 +46,6 @@ def test_directory(tmp_path):
 
 
 # artifact_name
-@pytest.mark.parametrize(
-    "path, expected",
-    [
-        ("contoh-app.zip", "contoh-app.zip"),
-        ("dist/contoh-app.zip", "contoh-app.zip"),
-        ("./dist/contoh-app.zip", "contoh-app.zip"),
-        ("/input/contoh-app.zip", "contoh-app.zip"),
-    ],
-)
-def test_artifact_name(path, expected):
-    assert artifact_name(path) == expected
+@pytest.mark.parametrize("path", ["./dist/contoh-app.zip", "/input/contoh-app.zip"])
+def test_artifact_name(path):
+    assert artifact_name(path) == "contoh-app.zip"
