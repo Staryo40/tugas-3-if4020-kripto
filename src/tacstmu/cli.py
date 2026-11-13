@@ -62,12 +62,33 @@ def cmd_keygen(args: argparse.Namespace) -> int | None:
     print(keys.keyid(key.public_key()))
 
 def cmd_sign(args: argparse.Namespace) -> int | None:
-    # TODO: sign args.file and write the bundle to args.out (refuse an existing file unless args.force)
-    pass
+    from .release.signing import sign_release
+    sign_release(args.file, args.package, args.version, args.key, args.out, force=args.force)
+    print(f"wrote {args.out}", file=sys.stderr)
 
 def cmd_verify(args: argparse.Namespace) -> int | None:
-    # TODO: verify, then `return report_verify(result, args.json)` with the VERIFY_FIELDS result
-    pass
+    from .release.verification import verify_release
+    result = verify_release(args.file, args.bundle, args.trust_store, args.package, args.version)
+    return report_verify(result, args.json)
+
+
+def cmd_verify_release(args: argparse.Namespace) -> int:
+    from .release.sbom import verify_release_with_sbom
+    result = verify_release_with_sbom(
+        args.file, args.bundle, args.sbom, args.sbom_bundle, args.trust_store,
+        args.package, args.version, args.sbom_package, args.sbom_version,
+    )
+    return report_sbom(result, args.json)
+
+
+def report_sbom(result: dict, as_json: bool) -> int:
+    if as_json:
+        sys.stdout.write(json.dumps(result, ensure_ascii=False) + "\n")
+    else:
+        print(f"{result['status']} ({result['stage']}): {result['message']}")
+    if result["valid"] is True and result["status"] == STATUS_OK:
+        return EXIT_OK
+    return EXIT_ERROR if result["status"] == InputError.status else EXIT_REJECTED
 
 def cmd_trust_add(args: argparse.Namespace) -> int | None:
     # TODO: add args.key for args.package to args.store, print keyid, algorithm and packages
@@ -121,6 +142,19 @@ def _build_parser() -> _Parser:
     verify.add_argument("--json", action="store_true", help="print the result as JSON")
     verify.set_defaults(handler=cmd_verify)
 
+    combined = commands.add_parser("verify-release", help="verify release and signed SBOM, then their SHA-256 binding")
+    combined.add_argument("--file", required=True, metavar="PATH", help="release artifact")
+    combined.add_argument("--bundle", required=True, metavar="BUNDLE", help="release bundle")
+    combined.add_argument("--sbom", required=True, metavar="SBOM_JSON", help="SBOM artifact")
+    combined.add_argument("--sbom-bundle", required=True, metavar="BUNDLE", help="SBOM bundle")
+    combined.add_argument("--trust-store", required=True, metavar="TRUST_JSON")
+    combined.add_argument("--package", required=True, help="expected release package")
+    combined.add_argument("--version", required=True, help="expected release version")
+    combined.add_argument("--sbom-package", required=True, help="expected SBOM package")
+    combined.add_argument("--sbom-version", required=True, help="expected SBOM version")
+    combined.add_argument("--json", action="store_true")
+    combined.set_defaults(handler=cmd_verify_release)
+
     trust = commands.add_parser("trust", help="manage trusted public keys")
     trust_commands = trust.add_subparsers(dest="trust_command", required=True, metavar="<trust command>")
 
@@ -149,11 +183,16 @@ def _report_usage_error(argv: list[str], exc: _UsageError) -> int:
 
     if argv[:1] == ["verify"] and "--json" in argv:
         report_verify(_failed_result(InputError.status, f"usage error: {exc}"), as_json=True)
+    elif argv[:1] == ["verify-release"] and "--json" in argv:
+        report_sbom(_failed_sbom_result(f"usage error: {exc}"), as_json=True)
 
     return EXIT_ERROR
 
 def _report_error(args: argparse.Namespace, exc: TacstmuError) -> int:
     print(f"{PROG}: error: {exc}", file=sys.stderr)
+
+    if args.command == "verify-release":
+        return report_sbom(_failed_sbom_result(str(exc)), args.json)
 
     if args.command == "verify":
         # an unclassified error is reported as an input/environment failure
@@ -172,3 +211,7 @@ def _failed_result(status: str, message: str) -> dict:
         "package": None,
         "version": None,
     }
+
+def _failed_sbom_result(message: str) -> dict:
+    return {"valid": False, "status": InputError.status, "message": message,
+            "stage": "input", "release": None, "sbom": None, "binding_valid": False}

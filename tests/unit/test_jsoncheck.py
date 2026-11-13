@@ -1,3 +1,5 @@
+import sys
+
 import pytest
 
 from tacstmu.core.jsoncheck import expect_object, loads
@@ -55,3 +57,17 @@ def test_expect_object_rejects(value, match):
 def test_bool_is_not_integer():
     with pytest.raises(FormatError, match="boolean"):
         expect_object({"size": True}, {"size": int})
+
+
+@pytest.mark.parametrize("sign", ["", "-"], ids=["positive", "negative"])
+def test_large_integer_conversion_is_format_error(sign):
+    # Make the regression independent of the invoking shell's Python settings.
+    previous = sys.get_int_max_str_digits()
+    try:
+        sys.set_int_max_str_digits(4300)
+        data = b'{"n":' + sign.encode() + b"9" * 5000 + b"}"
+        with pytest.raises(FormatError, match="numeric value exceeds parser limits"):
+            loads(data)
+        assert sys.get_int_max_str_digits() == 4300
+    finally:
+        sys.set_int_max_str_digits(previous)

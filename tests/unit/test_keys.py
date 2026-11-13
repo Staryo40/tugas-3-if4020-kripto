@@ -1,5 +1,6 @@
 import base64
 import hashlib
+import os
 import stat
 
 import pytest
@@ -129,7 +130,8 @@ def test_write_keypair_creates_files(tmp_path, generated):
     assert private_path == tmp_path / "keys" / "publisher.key.pem"
     assert public_path == tmp_path / "keys" / "publisher.pub.pem"
     assert keys.load_private_pem(private_path.read_bytes())[1] == PROFILE_ED25519
-    assert stat.S_IMODE(private_path.stat().st_mode) == 0o600
+    if os.name != "nt":  # Windows stat modes do not represent ACL privacy.
+        assert stat.S_IMODE(private_path.stat().st_mode) == 0o600
 
 def test_write_keypair_refuses_overwrite(tmp_path, generated):
     keys.write_keypair(tmp_path / "pub", generated[PROFILE_ED25519])
@@ -150,4 +152,26 @@ def test_write_keypair_force_overwrites(tmp_path, generated):
     private_path.chmod(0o644)
     keys.write_keypair(tmp_path / "pub", generated[PROFILE_ECDSA], force=True)
     assert keys.load_private_pem(private_path.read_bytes())[1] == PROFILE_ECDSA
-    assert stat.S_IMODE(private_path.stat().st_mode) == 0o600
+    if os.name != "nt":  # Windows stat modes do not represent ACL privacy.
+        assert stat.S_IMODE(private_path.stat().st_mode) == 0o600
+
+
+def test_write_keypair_without_fchmod(tmp_path, generated, monkeypatch):
+    monkeypatch.delattr(keys.os, "fchmod", raising=False)
+    private, public = keys.write_keypair(tmp_path / "portable", generated[PROFILE_ED25519])
+    assert keys.load_private_pem(private.read_bytes())[1] == PROFILE_ED25519
+    assert keys.load_public_pem(public.read_bytes())[1] == PROFILE_ED25519
+
+
+def test_write_keypair_applies_fchmod_when_available(tmp_path, generated, monkeypatch):
+    calls = []
+    original = getattr(keys.os, "fchmod", None)
+    def record(fd, mode):
+        calls.append(mode)
+        if original is not None:
+            original(fd, mode)
+    monkeypatch.setattr(keys.os, "fchmod", record, raising=False)
+    private, public = keys.write_keypair(tmp_path / "permissions", generated[PROFILE_ED25519])
+    assert calls == [0o600, 0o644]
+    assert keys.load_private_pem(private.read_bytes())[1] == PROFILE_ED25519
+    assert keys.load_public_pem(public.read_bytes())[1] == PROFILE_ED25519

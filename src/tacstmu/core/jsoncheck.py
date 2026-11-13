@@ -16,6 +16,10 @@ def loads(data: bytes) -> object:
         )
     except json.JSONDecodeError as exc:
         raise FormatError(f"invalid JSON: {exc.msg} at line {exc.lineno} column {exc.colno}") from None
+    except ValueError:
+        # CPython bounds decimal integer conversion independently of JSON syntax.
+        # A rejected number is a format failure, not an input/environment failure.
+        raise FormatError("invalid JSON: numeric value exceeds parser limits") from None
     except RecursionError:
         raise FormatError("invalid JSON: nested too deeply") from None
 

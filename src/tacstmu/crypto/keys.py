@@ -145,6 +145,8 @@ def _write_file(path: Path, data: bytes, mode: int, exclusive: bool) -> None:
     flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | (os.O_EXCL if exclusive else 0)
     fd = os.open(path, flags, mode)
     with os.fdopen(fd, "wb") as f:
-        # an overwritten file keeps its old mode otherwise
-        os.fchmod(fd, mode)
+        # Preserve POSIX permissions, including when overwriting a key.
+        # Windows has no fchmod; access there follows the directory ACL.
+        if hasattr(os, "fchmod"):
+            os.fchmod(fd, mode)
         f.write(data)
