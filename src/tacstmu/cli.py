@@ -91,16 +91,19 @@ def report_sbom(result: dict, as_json: bool) -> int:
     return EXIT_ERROR if result["status"] == InputError.status else EXIT_REJECTED
 
 def cmd_trust_add(args: argparse.Namespace) -> int | None:
-    # TODO: add args.key for args.package to args.store, print keyid, algorithm and packages
-    pass
+    from .release.trust import add_trusted_key
+    entry = add_trusted_key(args.store, args.key, args.package)
+    print(f"{entry.keyid}\t{entry.profile}\t{','.join(sorted(entry.packages))}")
 
 def cmd_trust_list(args: argparse.Namespace) -> int | None:
-    # TODO: print keyid, algorithm and packages of every entry in args.store
-    pass
+    from .release.trust import load_trust_store
+    store = load_trust_store(args.store)
+    for entry in sorted(store.entries.values(), key=lambda entry: entry.keyid):
+        print(f"{entry.keyid}\t{entry.profile}\t{','.join(sorted(entry.packages))}")
 
 def cmd_trust_remove(args: argparse.Namespace) -> int | None:
-    # TODO: remove args.keyid from args.store, InputError if it is not there
-    pass
+    from .release.trust import remove_trusted_key
+    remove_trusted_key(args.store, args.keyid)
 
 
 # Argument parsing
