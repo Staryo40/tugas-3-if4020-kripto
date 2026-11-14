@@ -1,0 +1,19 @@
+# Only application source and packaging metadata belong in the build context.
+**
+!Dockerfile
+!.dockerignore
+!pyproject.toml
+!README.md
+!src/
+!src/**
+
+# Exclude generated files and key material even if placed under src/.
+**/__pycache__/
+**/*.py[cod]
+**/*.egg-info/
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+**/.env
+**/.env.*

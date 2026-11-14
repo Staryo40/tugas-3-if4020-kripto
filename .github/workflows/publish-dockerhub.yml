@@ -1,0 +1,92 @@
+name: Publish Docker Hub image
+
+on:
+  push:
+    tags:
+      - 'v[0-9]*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dockerhub-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DOCKERHUB_USERNAME: ${{ vars.DOCKERHUB_USERNAME }}
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Validate release version
+        id: release
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import ast
+          import os
+          import re
+          from pathlib import Path
+
+          username = os.environ["DOCKERHUB_USERNAME"]
+          if not re.fullmatch(r"[a-z0-9][a-z0-9_-]*", username):
+              raise SystemExit("Set the DOCKERHUB_USERNAME repository variable to your Docker Hub username.")
+          version = os.environ["GITHUB_REF_NAME"].removeprefix("v")
+          if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[A-Za-z0-9.-]+)?", version):
+              raise SystemExit("Use a release tag such as v0.1.0 or v0.2.0-rc.1.")
+          source = ast.parse(Path("src/tacstmu/__init__.py").read_text())
+          declared = next(
+              ast.literal_eval(node.value)
+              for node in source.body
+              if isinstance(node, ast.Assign)
+              and any(isinstance(target, ast.Name) and target.id == "__version__" for target in node.targets)
+          )
+          if version != declared:
+              raise SystemExit(f"Release tag version {version!r} differs from tool version {declared!r}.")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              print(f"version={version}", file=output)
+              print(f"image=docker.io/{username}/tacstmu", file=output)
+          PY
+
+      - name: Sign in to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push release image
+        id: build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          platforms: linux/amd64
+          push: true
+          tags: ${{ steps.release.outputs.image }}:${{ steps.release.outputs.version }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.version=${{ steps.release.outputs.version }}
+
+      - name: Record published image
+        env:
+          IMAGE: ${{ steps.release.outputs.image }}
+          VERSION: ${{ steps.release.outputs.version }}
+          DIGEST: ${{ steps.build.outputs.digest }}
+        shell: bash
+        run: |
+          {
+            printf 'Source tag: `%s`\n\n' "$GITHUB_REF_NAME"
+            printf 'Source commit: `%s`\n\n' "$GITHUB_SHA"
+            printf 'Image tag: `%s:%s`\n\n' "$IMAGE" "$VERSION"
+            printf 'Pinned image: `%s@%s`\n\n' "$IMAGE" "$DIGEST"
+            printf 'Copy this version mapping into the README for the release.\n'
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -7,6 +7,24 @@ flipped byte, one unknown key, one suspicious version number, and **Totally Awes
 
 P.S. We are open to suggestion on the software name, hence the (仮) meaning temporary :D
 
+## Published image
+
+The image is available on [Docker Hub](https://hub.docker.com/r/rizalks/tacstmu).
+
+| Ver | Tag | Image digest |
+|---|---|---|
+| `0.1.0` | `rizalks/tacstmu:0.1.0` | `sha256:ce601a5f0f21667f322456ed2dd1610fa7f3418b7725b5a7a903f5f89594b4d3` |
+
+
+To pull and run the exact digest:
+
+```sh
+IMAGE=rizalks/tacstmu@sha256:ce601a5f0f21667f322456ed2dd1610fa7f3418b7725b5a7a903f5f89594b4d3
+docker pull "$IMAGE"
+docker run --rm --network none "$IMAGE" --version
+docker run --rm --network none "$IMAGE" --help
+```
+
 ## Setup and running locally
 
 Requires Python 3.12 or newer.
