@@ -1,0 +1,30 @@
+{
+  "date_utc": "2026-11-16T00:41:27+00:00",
+  "cpu": "AMD Ryzen 7 8845HS w/ Radeon 780M Graphics",
+  "logical_cores": 16,
+  "memory_total": "32127700 kB",
+  "os": "Linux-7.3.3-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "python": "3.14.10",
+  "python_implementation": "CPython",
+  "cryptography": "50.0.2",
+  "openssl_backend": "OpenSSL 4.0.3 29 Sep 2026",
+  "tacstmu": "0.1.0",
+  "timer": {
+    "function": "time.perf_counter_ns",
+    "monotonic": true,
+    "resolution_s": 1e-09
+  },
+  "percentile_method": "nearest-rank: P95 = sorted[ceil(0.95 * n)] with positions starting at 1",
+  "runs": {
+    "warmup": 5,
+    "raw_and_hash": 100,
+    "end_to_end": 30,
+    "keygen": 10
+  },
+  "artifact_sizes_bytes": {
+    "1KiB": 1024,
+    "1MiB": 1048576,
+    "100MiB": 104857600
+  },
+  "artifacts": "random bytes, created in a temporary folder, identical for every algorithm"
+}
