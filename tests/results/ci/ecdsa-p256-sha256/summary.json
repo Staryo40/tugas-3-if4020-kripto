@@ -1,0 +1,23 @@
+{
+  "image": "rizalks/tacstmu@sha256:ce601a5f0f21667f322456ed2dd1610fa7f3418b7725b5a7a903f5f89594b4d3",
+  "profile": "ecdsa-p256-sha256",
+  "artifact": "project.tar.gz",
+  "source_commit": "1e6d9eb49101f1fc864febe01097413830eba457",
+  "uid": 1001,
+  "gid": 1001,
+  "network": "none",
+  "tty": false,
+  "run_url": "https://github.com/rizalkhairan/software-release-cicd-test/actions/runs/43581919825",
+  "results": [
+    {
+      "scenario": "C01",
+      "exit_code": 0,
+      "status": "OK",
+      "valid": true,
+      "deployment_marker": true,
+      "algorithm": "ecdsa-p256-sha256",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

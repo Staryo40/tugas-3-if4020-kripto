@@ -1,0 +1,1 @@
+{"valid": true, "status": "OK", "message": "Signature, metadata, and artifact are valid.", "algorithm": "ed25519", "keyid": "4c73873ac7237667c429ba6f95ff98b5ee2728eb3841a368d883fd07e526314f", "package": "ci-demo", "version": "1.0.0"}

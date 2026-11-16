@@ -1,0 +1,36 @@
+docker.io/rizalks/tacstmu@sha256:ce601a5f0f21667f322456ed2dd1610fa7f3418b7725b5a7a903f5f89594b4d3: Pulling from rizalks/tacstmu
+dd051e1b8c92: Pulling fs layer
+a47be7bff94f: Pulling fs layer
+8691b22c22a3: Pulling fs layer
+88d156875409: Pulling fs layer
+333d6ac8db51: Pulling fs layer
+e7dd949ff161: Pulling fs layer
+46014e45be82: Pulling fs layer
+333d6ac8db51: Waiting
+e7dd949ff161: Waiting
+46014e45be82: Waiting
+88d156875409: Waiting
+a47be7bff94f: Verifying Checksum
+a47be7bff94f: Download complete
+8691b22c22a3: Verifying Checksum
+8691b22c22a3: Download complete
+dd051e1b8c92: Verifying Checksum
+dd051e1b8c92: Download complete
+88d156875409: Verifying Checksum
+88d156875409: Download complete
+e7dd949ff161: Verifying Checksum
+e7dd949ff161: Download complete
+46014e45be82: Verifying Checksum
+46014e45be82: Download complete
+333d6ac8db51: Verifying Checksum
+333d6ac8db51: Download complete
+dd051e1b8c92: Pull complete
+a47be7bff94f: Pull complete
+8691b22c22a3: Pull complete
+88d156875409: Pull complete
+333d6ac8db51: Pull complete
+e7dd949ff161: Pull complete
+46014e45be82: Pull complete
+Digest: sha256:ce601a5f0f21667f322456ed2dd1610fa7f3418b7725b5a7a903f5f89594b4d3
+Status: Downloaded newer image for rizalks/tacstmu@sha256:ce601a5f0f21667f322456ed2dd1610fa7f3418b7725b5a7a903f5f89594b4d3
+docker.io/rizalks/tacstmu@sha256:ce601a5f0f21667f322456ed2dd1610fa7f3418b7725b5a7a903f5f89594b4d3

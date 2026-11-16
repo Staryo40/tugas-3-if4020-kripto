@@ -1,0 +1,8 @@
+{
+  "exit_code": 2,
+  "status": "INPUT_ERROR",
+  "valid": false,
+  "deployment_marker": false,
+  "algorithm": null,
+  "passed": true
+}

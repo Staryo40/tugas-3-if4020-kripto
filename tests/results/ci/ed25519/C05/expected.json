@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "status": "OK",
+  "valid": true,
+  "deployment_marker": true,
+  "algorithm": "ed25519"
+}

@@ -1,0 +1,1 @@
+{"valid": true, "status": "OK", "message": "Signature, metadata, and artifact are valid.", "algorithm": "rsa-pss-sha256", "keyid": "da88987a00b9ab98e005c63993942d36728b877258b70d5ca813ecf32814d3dc", "package": "ci-demo", "version": "1.0.0"}

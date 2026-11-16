@@ -1,0 +1,8 @@
+{
+  "exit_code": 1,
+  "status": "ARTIFACT_MISMATCH",
+  "valid": false,
+  "deployment_marker": false,
+  "algorithm": "ed25519",
+  "passed": true
+}

@@ -1,0 +1,8 @@
+{
+  "exit_code": 0,
+  "status": "OK",
+  "valid": true,
+  "deployment_marker": true,
+  "algorithm": "rsa-pss-sha256",
+  "passed": true
+}
