@@ -1,0 +1,6 @@
+{
+  "description": "tacstmu loads an OpenSSL key pair and verifies an OpenSSL signature",
+  "exit_code": 0,
+  "status": "OK",
+  "signature_identical_to_tacstmu": true
+}

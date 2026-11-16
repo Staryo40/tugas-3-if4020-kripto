@@ -1,0 +1,13 @@
+{
+  "schema": "minisign-trust/v1",
+  "keys": [
+    {
+      "keyid": "a47b4f14f01e7b225804f969eeb4ffe35096b1ab1a9670591c29046d6675a0a7",
+      "algorithm": "ecdsa-p256-sha256",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEUIQSxm0woaeNSHDg73Nwt9bKQTT3\njZifATmu4gDPiiNa5UqWYhTDohvGNNN8ELdfa6LPYd3dh8IROe1NC1eSCQ==\n-----END PUBLIC KEY-----\n",
+      "packages": [
+        "contoh-app"
+      ]
+    }
+  ]
+}

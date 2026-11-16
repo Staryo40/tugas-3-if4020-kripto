@@ -1,0 +1,97 @@
+{
+  "openssl": "OpenSSL 3.5.9 29 Sep 2026 (Library: OpenSSL 3.5.9 29 Sep 2026)",
+  "passed": 6,
+  "total": 6,
+  "cases": [
+    {
+      "id": "rsa-pss-sha256-tacstmu-to-openssl",
+      "profile": "rsa-pss-sha256",
+      "description": "OpenSSL verifies a tacstmu signature, and rejects it for a tampered manifest",
+      "expected": {
+        "openssl_accepts": true,
+        "openssl_rejects_tampered": true
+      },
+      "actual": {
+        "openssl_accepts": true,
+        "openssl_rejects_tampered": true
+      },
+      "passed": true
+    },
+    {
+      "id": "rsa-pss-sha256-openssl-to-tacstmu",
+      "profile": "rsa-pss-sha256",
+      "description": "tacstmu loads an OpenSSL key pair and verifies an OpenSSL signature",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "signature_identical_to_tacstmu": false
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "signature_identical_to_tacstmu": false
+      },
+      "passed": true
+    },
+    {
+      "id": "ecdsa-p256-sha256-tacstmu-to-openssl",
+      "profile": "ecdsa-p256-sha256",
+      "description": "OpenSSL verifies a tacstmu signature, and rejects it for a tampered manifest",
+      "expected": {
+        "openssl_accepts": true,
+        "openssl_rejects_tampered": true
+      },
+      "actual": {
+        "openssl_accepts": true,
+        "openssl_rejects_tampered": true
+      },
+      "passed": true
+    },
+    {
+      "id": "ecdsa-p256-sha256-openssl-to-tacstmu",
+      "profile": "ecdsa-p256-sha256",
+      "description": "tacstmu loads an OpenSSL key pair and verifies an OpenSSL signature",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "signature_identical_to_tacstmu": false
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "signature_identical_to_tacstmu": false
+      },
+      "passed": true
+    },
+    {
+      "id": "ed25519-tacstmu-to-openssl",
+      "profile": "ed25519",
+      "description": "OpenSSL verifies a tacstmu signature, and rejects it for a tampered manifest",
+      "expected": {
+        "openssl_accepts": true,
+        "openssl_rejects_tampered": true
+      },
+      "actual": {
+        "openssl_accepts": true,
+        "openssl_rejects_tampered": true
+      },
+      "passed": true
+    },
+    {
+      "id": "ed25519-openssl-to-tacstmu",
+      "profile": "ed25519",
+      "description": "tacstmu loads an OpenSSL key pair and verifies an OpenSSL signature",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "signature_identical_to_tacstmu": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "signature_identical_to_tacstmu": true
+      },
+      "passed": true
+    }
+  ]
+}

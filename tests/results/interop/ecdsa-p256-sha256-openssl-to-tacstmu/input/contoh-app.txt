@@ -1,0 +1,1 @@
+contoh-app 1.0.0 interop artifact

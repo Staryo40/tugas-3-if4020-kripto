@@ -1,0 +1,101 @@
+[
+  {
+    "label": "openssl-genpkey",
+    "command": [
+      "openssl",
+      "genpkey",
+      "-algorithm",
+      "RSA",
+      "-pkeyopt",
+      "rsa_keygen_bits:3072",
+      "-pkeyopt",
+      "rsa_keygen_pubexp:65537",
+      "-out",
+      "/tmp/tacstmu-interop-79s8xtv0/rsa-pss-sha256.key.pem"
+    ]
+  },
+  {
+    "label": "openssl-pubout",
+    "command": [
+      "openssl",
+      "pkey",
+      "-in",
+      "/tmp/tacstmu-interop-79s8xtv0/rsa-pss-sha256.key.pem",
+      "-pubout",
+      "-out",
+      "input/openssl.pub.pem"
+    ]
+  },
+  {
+    "label": "trust-add",
+    "command": [
+      "tacstmu",
+      "trust",
+      "add",
+      "--key",
+      "input/openssl.pub.pem",
+      "--package",
+      "contoh-app",
+      "--store",
+      "input/trust.json"
+    ]
+  },
+  {
+    "label": "sign",
+    "command": [
+      "tacstmu",
+      "sign",
+      "--file",
+      "input/contoh-app.txt",
+      "--package",
+      "contoh-app",
+      "--version",
+      "1.0.0",
+      "--key",
+      "/tmp/tacstmu-interop-79s8xtv0/rsa-pss-sha256.key.pem",
+      "--out",
+      "input/bundle.json"
+    ]
+  },
+  {
+    "label": "openssl-sign",
+    "command": [
+      "openssl",
+      "pkeyutl",
+      "-sign",
+      "-inkey",
+      "/tmp/tacstmu-interop-79s8xtv0/rsa-pss-sha256.key.pem",
+      "-rawin",
+      "-digest",
+      "sha256",
+      "-pkeyopt",
+      "rsa_padding_mode:pss",
+      "-pkeyopt",
+      "rsa_pss_saltlen:32",
+      "-pkeyopt",
+      "rsa_mgf1_md:sha256",
+      "-in",
+      "input/manifest.bin",
+      "-out",
+      "input/openssl-signature.bin"
+    ]
+  },
+  {
+    "label": "verify",
+    "command": [
+      "tacstmu",
+      "verify",
+      "--file",
+      "input/contoh-app.txt",
+      "--bundle",
+      "input/bundle.json",
+      "--trust-store",
+      "input/trust.json",
+      "--package",
+      "contoh-app",
+      "--version",
+      "1.0.0",
+      "--json"
+    ]
+  }
+]

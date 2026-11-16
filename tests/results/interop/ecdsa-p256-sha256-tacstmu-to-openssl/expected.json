@@ -1,0 +1,5 @@
+{
+  "description": "OpenSSL verifies a tacstmu signature, and rejects it for a tampered manifest",
+  "openssl_accepts": true,
+  "openssl_rejects_tampered": true
+}
