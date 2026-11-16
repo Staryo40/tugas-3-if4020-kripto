@@ -1,0 +1,53 @@
+[
+  {
+    "step": "trust-add",
+    "command": "tacstmu trust add --key ../../../keys/ed25519.pub.pem --package contoh-app --store input/trust.json",
+    "exit_code": 0,
+    "stdout": "c029f9b4967f6efee395c90af71babfe3fb857c041db35d1de0d1363900138dd\ted25519\tcontoh-app",
+    "stderr": ""
+  },
+  {
+    "step": "sign-1",
+    "command": "tacstmu sign --file input/contoh-app.txt --package contoh-app --version 1.0.0 --key ../../../keys/ed25519.key.pem --out input/bundle-1.json",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "wrote input/bundle-1.json"
+  },
+  {
+    "step": "sign-2",
+    "command": "tacstmu sign --file input/contoh-app.txt --package contoh-app --version 1.0.0 --key ../../../keys/ed25519.key.pem --out input/bundle-2.json",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "wrote input/bundle-2.json"
+  },
+  {
+    "step": "verify-1",
+    "command": "tacstmu verify --file input/contoh-app.txt --bundle input/bundle-1.json --trust-store input/trust.json --package contoh-app --version 1.0.0 --json",
+    "exit_code": 0,
+    "stdout": {
+      "valid": true,
+      "status": "OK",
+      "message": "Signature, metadata, and artifact are valid.",
+      "algorithm": "ed25519",
+      "keyid": "c029f9b4967f6efee395c90af71babfe3fb857c041db35d1de0d1363900138dd",
+      "package": "contoh-app",
+      "version": "1.0.0"
+    },
+    "stderr": ""
+  },
+  {
+    "step": "verify-2",
+    "command": "tacstmu verify --file input/contoh-app.txt --bundle input/bundle-2.json --trust-store input/trust.json --package contoh-app --version 1.0.0 --json",
+    "exit_code": 0,
+    "stdout": {
+      "valid": true,
+      "status": "OK",
+      "message": "Signature, metadata, and artifact are valid.",
+      "algorithm": "ed25519",
+      "keyid": "c029f9b4967f6efee395c90af71babfe3fb857c041db35d1de0d1363900138dd",
+      "package": "contoh-app",
+      "version": "1.0.0"
+    },
+    "stderr": ""
+  }
+]

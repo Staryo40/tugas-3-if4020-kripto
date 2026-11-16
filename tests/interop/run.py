@@ -2,6 +2,7 @@ import base64
 import json
 import os
 from pathlib import Path
+import shlex
 import shutil
 import subprocess
 import sys
@@ -35,7 +36,7 @@ class Case:
         self.folder = RESULTS / case_id
         self.input = self.folder / "input"
         self.input.mkdir(parents=True)
-        self.commands = []
+        self.log = []
         self.artifact = self.input / ARTIFACT[0]
         self.artifact.write_bytes(ARTIFACT[1])
         self.bundle = self.input / "bundle.json"
@@ -44,13 +45,10 @@ class Case:
         self.signature = self.input / "signature.bin"
 
     def run(self, label: str, *argv: str) -> subprocess.CompletedProcess:
-        self.commands.append({"label": label, "command": list(argv)})
         executable = [sys.executable, "-m", "tacstmu", *argv[1:]] if argv[0] == "tacstmu" else list(argv)
         result = subprocess.run(executable, cwd=self.folder, capture_output=True,
                                 stdin=subprocess.DEVNULL, timeout=120)
-        (self.folder / f"{label}.stdout.log").write_bytes(result.stdout)
-        (self.folder / f"{label}.stderr.log").write_bytes(result.stderr)
-        (self.folder / f"{label}.exit-code.txt").write_text(f"{result.returncode}\n")
+        self.log.append(log_entry(label, list(argv), result))
         return result
 
     def must(self, label: str, *argv: str) -> subprocess.CompletedProcess:
@@ -64,7 +62,7 @@ class Case:
 
     def finish(self, description: str, expected: dict, actual: dict) -> dict:
         passed = all(actual.get(name) == value for name, value in expected.items())
-        _write_json(self.folder / "commands.json", self.commands)
+        _write_json(self.folder / "log.json", self.log)
         _write_json(self.folder / "expected.json", {"description": description, **expected})
         _write_json(self.folder / "actual.json", {**actual, "passed": passed})
         print(f"{'PASS' if passed else 'FAIL'}  {self.id}")
@@ -126,6 +124,22 @@ def replace_signature(case: Case, signature: bytes) -> None:
 
 def _write_json(path: Path, value) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
+
+
+# Process log entries
+def log_entry(step: str, command: list[str], result: subprocess.CompletedProcess) -> dict:
+    return {"step": step, "command": shlex.join(command), "exit_code": result.returncode,
+            "stdout": _readable(result.stdout), "stderr": _readable(result.stderr)}
+
+def _readable(output: bytes) -> object:
+    # JSON output stays structured, multi-line text becomes a list of lines
+    text = output.decode(errors="replace").rstrip("\n")
+    if not text:
+        return ""
+    try:
+        return json.loads(text)
+    except ValueError:
+        return text.splitlines() if "\n" in text else text
 
 
 # Cases

@@ -1,1 +1,0 @@
-{"valid": false, "status": "FORMAT_ERROR", "message": "invalid Base64: only A-Z, a-z, 0-9, +, / and trailing = padding are allowed", "algorithm": null, "keyid": null, "package": null, "version": null}

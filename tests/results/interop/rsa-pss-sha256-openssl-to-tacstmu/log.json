@@ -1,0 +1,55 @@
+[
+  {
+    "step": "openssl-genpkey",
+    "command": "openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:3072 -pkeyopt rsa_keygen_pubexp:65537 -out /tmp/tacstmu-interop-dlpouep4/rsa-pss-sha256.key.pem",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": [
+      ".........+...+..+.+..++++++++++++++++++++++++++++++++++++++++++*..+...+....+...++++++++++++++++++++++++++++++++++++++++++*.......+....+...+...+........+++++",
+      "......+..+....+......+........++++++++++++++++++++++++++++++++++++++++++*.+..+.......+..+.............+...+.....+...+.......+.........+.........+..+....+......++++++++++++++++++++++++++++++++++++++++++*.......+...+......+.....+............+..........+..+..........+..+.+.....+++++"
+    ]
+  },
+  {
+    "step": "openssl-pubout",
+    "command": "openssl pkey -in /tmp/tacstmu-interop-dlpouep4/rsa-pss-sha256.key.pem -pubout -out input/openssl.pub.pem",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": "trust-add",
+    "command": "tacstmu trust add --key input/openssl.pub.pem --package contoh-app --store input/trust.json",
+    "exit_code": 0,
+    "stdout": "b6cc379b26408810b6b69df660c23c5c464d1fd1212b17262bdafd9fb8bdd8b5\trsa-pss-sha256\tcontoh-app",
+    "stderr": ""
+  },
+  {
+    "step": "sign",
+    "command": "tacstmu sign --file input/contoh-app.txt --package contoh-app --version 1.0.0 --key /tmp/tacstmu-interop-dlpouep4/rsa-pss-sha256.key.pem --out input/bundle.json",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "wrote input/bundle.json"
+  },
+  {
+    "step": "openssl-sign",
+    "command": "openssl pkeyutl -sign -inkey /tmp/tacstmu-interop-dlpouep4/rsa-pss-sha256.key.pem -rawin -digest sha256 -pkeyopt rsa_padding_mode:pss -pkeyopt rsa_pss_saltlen:32 -pkeyopt rsa_mgf1_md:sha256 -in input/manifest.bin -out input/openssl-signature.bin",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": "verify",
+    "command": "tacstmu verify --file input/contoh-app.txt --bundle input/bundle.json --trust-store input/trust.json --package contoh-app --version 1.0.0 --json",
+    "exit_code": 0,
+    "stdout": {
+      "valid": true,
+      "status": "OK",
+      "message": "Signature, metadata, and artifact are valid.",
+      "algorithm": "rsa-pss-sha256",
+      "keyid": "b6cc379b26408810b6b69df660c23c5c464d1fd1212b17262bdafd9fb8bdd8b5",
+      "package": "contoh-app",
+      "version": "1.0.0"
+    },
+    "stderr": ""
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "step": "openssl-genpkey",
+    "command": "openssl genpkey -algorithm ED25519 -out /tmp/tacstmu-interop-dlpouep4/ed25519.key.pem",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": "openssl-pubout",
+    "command": "openssl pkey -in /tmp/tacstmu-interop-dlpouep4/ed25519.key.pem -pubout -out input/openssl.pub.pem",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": "trust-add",
+    "command": "tacstmu trust add --key input/openssl.pub.pem --package contoh-app --store input/trust.json",
+    "exit_code": 0,
+    "stdout": "4a8bd6ff01cc36bd5cb3679cf24d62db25f12d028f6cca49e02bf1d1e3420547\ted25519\tcontoh-app",
+    "stderr": ""
+  },
+  {
+    "step": "sign",
+    "command": "tacstmu sign --file input/contoh-app.txt --package contoh-app --version 1.0.0 --key /tmp/tacstmu-interop-dlpouep4/ed25519.key.pem --out input/bundle.json",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "wrote input/bundle.json"
+  },
+  {
+    "step": "openssl-sign",
+    "command": "openssl pkeyutl -sign -inkey /tmp/tacstmu-interop-dlpouep4/ed25519.key.pem -rawin -in input/manifest.bin -out input/openssl-signature.bin",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": "verify",
+    "command": "tacstmu verify --file input/contoh-app.txt --bundle input/bundle.json --trust-store input/trust.json --package contoh-app --version 1.0.0 --json",
+    "exit_code": 0,
+    "stdout": {
+      "valid": true,
+      "status": "OK",
+      "message": "Signature, metadata, and artifact are valid.",
+      "algorithm": "ed25519",
+      "keyid": "4a8bd6ff01cc36bd5cb3679cf24d62db25f12d028f6cca49e02bf1d1e3420547",
+      "package": "contoh-app",
+      "version": "1.0.0"
+    },
+    "stderr": ""
+  }
+]

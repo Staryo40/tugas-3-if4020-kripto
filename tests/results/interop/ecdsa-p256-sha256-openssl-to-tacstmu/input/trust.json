@@ -2,9 +2,9 @@
   "schema": "minisign-trust/v1",
   "keys": [
     {
-      "keyid": "a47b4f14f01e7b225804f969eeb4ffe35096b1ab1a9670591c29046d6675a0a7",
+      "keyid": "15437a6aed420143e030e1b00f12b14634d8fdc4bc822098fc59f318a9508868",
       "algorithm": "ecdsa-p256-sha256",
-      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEUIQSxm0woaeNSHDg73Nwt9bKQTT3\njZifATmu4gDPiiNa5UqWYhTDohvGNNN8ELdfa6LPYd3dh8IROe1NC1eSCQ==\n-----END PUBLIC KEY-----\n",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEdDLYcy8WoVj+Hs1dMelclNcYaUhn\nGtVUL/Yj2O0kgq3iZweDbPTibTSgjB12pfN+q6XC+rsFjzjSK8CVq3fCOw==\n-----END PUBLIC KEY-----\n",
       "packages": [
         "contoh-app"
       ]

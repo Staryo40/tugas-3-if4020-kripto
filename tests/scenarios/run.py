@@ -3,6 +3,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -32,7 +33,7 @@ class Scenario:
         self.folder = RESULTS / scenario_id
         self.input = self.folder / "input"
         self.input.mkdir(parents=True)
-        self.commands = []
+        self.log = []
         self.artifact_name, data = ARTIFACTS[kind]
         self.artifact = self.input / self.artifact_name
         self.artifact.write_bytes(data)
@@ -40,14 +41,11 @@ class Scenario:
         self.trust = self.input / "trust.json"
 
     def run(self, label: str, *args: str) -> subprocess.CompletedProcess:
-        self.commands.append({"label": label, "command": ["tacstmu", *args]})
         result = subprocess.run(
             [sys.executable, "-m", "tacstmu", *args],
             cwd=self.folder, capture_output=True, stdin=subprocess.DEVNULL, timeout=120,
         )
-        (self.folder / f"{label}.stdout.log").write_bytes(result.stdout)
-        (self.folder / f"{label}.stderr.log").write_bytes(result.stderr)
-        (self.folder / f"{label}.exit-code.txt").write_text(f"{result.returncode}\n")
+        self.log.append(log_entry(label, ["tacstmu", *args], result))
         return result
 
     def rel(self, path: Path) -> str:
@@ -78,7 +76,7 @@ class Scenario:
 
     def finish(self, description: str, expected: dict, actual: dict, extra: dict | None = None) -> dict:
         passed = all(actual.get(name) == value for name, value in expected.items())
-        _write_json(self.folder / "commands.json", self.commands)
+        _write_json(self.folder / "log.json", self.log)
         _write_json(self.folder / "expected.json", {"description": description, **expected})
         _write_json(self.folder / "actual.json", {**actual, **(extra or {}), "passed": passed})
         print(f"{'PASS' if passed else 'FAIL'}  {self.id}")
@@ -110,6 +108,22 @@ def edit_manifest(scenario: Scenario, old: bytes, new: bytes) -> None:
 
 def _write_json(path: Path, value) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
+
+
+# Process log entries
+def log_entry(step: str, command: list[str], result: subprocess.CompletedProcess) -> dict:
+    return {"step": step, "command": shlex.join(command), "exit_code": result.returncode,
+            "stdout": _readable(result.stdout), "stderr": _readable(result.stderr)}
+
+def _readable(output: bytes) -> object:
+    # JSON output stays structured, multi-line text becomes a list of lines
+    text = output.decode(errors="replace").rstrip("\n")
+    if not text:
+        return ""
+    try:
+        return json.loads(text)
+    except ValueError:
+        return text.splitlines() if "\n" in text else text
 
 def _expect(status: str) -> dict:
     code = 0 if status == "OK" else 2 if status == "INPUT_ERROR" else 1

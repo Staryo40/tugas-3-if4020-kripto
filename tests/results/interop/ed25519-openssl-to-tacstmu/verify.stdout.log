@@ -1,1 +1,0 @@
-{"valid": true, "status": "OK", "message": "Signature, metadata, and artifact are valid.", "algorithm": "ed25519", "keyid": "3d9776c70ecc9ef69fce460e5bea231e2b0d13a9b41b16e4925d5a9fd1cc55e5", "package": "contoh-app", "version": "1.0.0"}

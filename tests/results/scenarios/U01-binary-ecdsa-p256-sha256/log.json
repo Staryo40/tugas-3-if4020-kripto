@@ -1,0 +1,31 @@
+[
+  {
+    "step": "trust-add",
+    "command": "tacstmu trust add --key ../../../keys/ecdsa-p256-sha256.pub.pem --package contoh-app --store input/trust.json",
+    "exit_code": 0,
+    "stdout": "9303e13ce06120ca0e60e2be8720bc0b1ce277d9e8599ffcae3f1b3a54df66f4\tecdsa-p256-sha256\tcontoh-app",
+    "stderr": ""
+  },
+  {
+    "step": "sign",
+    "command": "tacstmu sign --file input/contoh-app.bin --package contoh-app --version 1.0.0 --key ../../../keys/ecdsa-p256-sha256.key.pem --out input/bundle.json",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "wrote input/bundle.json"
+  },
+  {
+    "step": "verify",
+    "command": "tacstmu verify --file input/contoh-app.bin --bundle input/bundle.json --trust-store input/trust.json --package contoh-app --version 1.0.0 --json",
+    "exit_code": 0,
+    "stdout": {
+      "valid": true,
+      "status": "OK",
+      "message": "Signature, metadata, and artifact are valid.",
+      "algorithm": "ecdsa-p256-sha256",
+      "keyid": "9303e13ce06120ca0e60e2be8720bc0b1ce277d9e8599ffcae3f1b3a54df66f4",
+      "package": "contoh-app",
+      "version": "1.0.0"
+    },
+    "stderr": ""
+  }
+]

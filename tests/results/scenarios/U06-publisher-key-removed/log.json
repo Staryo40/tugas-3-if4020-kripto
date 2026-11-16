@@ -1,0 +1,38 @@
+[
+  {
+    "step": "trust-add",
+    "command": "tacstmu trust add --key ../../../keys/ed25519.pub.pem --package contoh-app --store input/trust.json",
+    "exit_code": 0,
+    "stdout": "c029f9b4967f6efee395c90af71babfe3fb857c041db35d1de0d1363900138dd\ted25519\tcontoh-app",
+    "stderr": ""
+  },
+  {
+    "step": "sign",
+    "command": "tacstmu sign --file input/contoh-app.txt --package contoh-app --version 1.0.0 --key ../../../keys/ed25519.key.pem --out input/bundle.json",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "wrote input/bundle.json"
+  },
+  {
+    "step": "trust-remove",
+    "command": "tacstmu trust remove --keyid c029f9b4967f6efee395c90af71babfe3fb857c041db35d1de0d1363900138dd --store input/trust.json",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "step": "verify",
+    "command": "tacstmu verify --file input/contoh-app.txt --bundle input/bundle.json --trust-store input/trust.json --package contoh-app --version 1.0.0 --json",
+    "exit_code": 1,
+    "stdout": {
+      "valid": false,
+      "status": "KEY_NOT_TRUSTED",
+      "message": "key is absent, has a different profile, or is unauthorized for expected package",
+      "algorithm": "ed25519",
+      "keyid": "c029f9b4967f6efee395c90af71babfe3fb857c041db35d1de0d1363900138dd",
+      "package": "contoh-app",
+      "version": "1.0.0"
+    },
+    "stderr": ""
+  }
+]
