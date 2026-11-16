@@ -1,0 +1,6 @@
+{
+  "description": "Publisher key removed from the trust store",
+  "exit_code": 1,
+  "status": "KEY_NOT_TRUSTED",
+  "valid": false
+}

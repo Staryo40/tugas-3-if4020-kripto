@@ -1,0 +1,3 @@
+contoh-app 1.0.0 release notes
+All bugs fixed. Probably.
+!

@@ -1,0 +1,1 @@
+{"valid": false, "status": "KEY_NOT_TRUSTED", "message": "key is absent, has a different profile, or is unauthorized for expected package", "algorithm": "ed25519", "keyid": "2dff07e879bfd2c9dacc8e4672088283bbd263958d7e41207865f7e5f5963264", "package": "contoh-app", "version": "1.0.0"}

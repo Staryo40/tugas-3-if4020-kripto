@@ -1,0 +1,6 @@
+{
+  "description": "Key trusted only for another package",
+  "exit_code": 1,
+  "status": "KEY_NOT_TRUSTED",
+  "valid": false
+}

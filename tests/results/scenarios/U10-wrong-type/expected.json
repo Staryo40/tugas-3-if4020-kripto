@@ -1,0 +1,6 @@
+{
+  "description": "Manifest artifact size is a boolean",
+  "exit_code": 1,
+  "status": "FORMAT_ERROR",
+  "valid": false
+}

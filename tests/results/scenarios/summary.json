@@ -1,0 +1,464 @@
+{
+  "passed": 29,
+  "total": 29,
+  "scenarios": [
+    {
+      "id": "U01-text-rsa-pss-sha256",
+      "profile": "rsa-pss-sha256",
+      "description": "Sign and verify a text file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-binary-rsa-pss-sha256",
+      "profile": "rsa-pss-sha256",
+      "description": "Sign and verify a binary file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-empty-rsa-pss-sha256",
+      "profile": "rsa-pss-sha256",
+      "description": "Sign and verify a empty file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-text-ecdsa-p256-sha256",
+      "profile": "ecdsa-p256-sha256",
+      "description": "Sign and verify a text file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-binary-ecdsa-p256-sha256",
+      "profile": "ecdsa-p256-sha256",
+      "description": "Sign and verify a binary file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-empty-ecdsa-p256-sha256",
+      "profile": "ecdsa-p256-sha256",
+      "description": "Sign and verify a empty file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-text-ed25519",
+      "profile": "ed25519",
+      "description": "Sign and verify a text file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-binary-ed25519",
+      "profile": "ed25519",
+      "description": "Sign and verify a binary file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U01-empty-ed25519",
+      "profile": "ed25519",
+      "description": "Sign and verify a empty file",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U02-byte-changed",
+      "profile": "ed25519",
+      "description": "One artifact byte changed, same size and name",
+      "expected": {
+        "exit_code": 1,
+        "status": "ARTIFACT_MISMATCH",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "ARTIFACT_MISMATCH",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U03-byte-added",
+      "profile": "ed25519",
+      "description": "One artifact byte added",
+      "expected": {
+        "exit_code": 1,
+        "status": "ARTIFACT_MISMATCH",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "ARTIFACT_MISMATCH",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U03-byte-removed",
+      "profile": "ed25519",
+      "description": "One artifact byte removed",
+      "expected": {
+        "exit_code": 1,
+        "status": "ARTIFACT_MISMATCH",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "ARTIFACT_MISMATCH",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U04-manifest-version-changed",
+      "profile": "ed25519",
+      "description": "Manifest version changed (still canonical), old signature kept",
+      "expected": {
+        "exit_code": 1,
+        "status": "INVALID_SIGNATURE",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "INVALID_SIGNATURE",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U05-signature-bit-flipped",
+      "profile": "ed25519",
+      "description": "One signature bit flipped, same length, valid Base64",
+      "expected": {
+        "exit_code": 1,
+        "status": "INVALID_SIGNATURE",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "INVALID_SIGNATURE",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U06-empty-trust-store",
+      "profile": "ed25519",
+      "description": "Empty trust store",
+      "expected": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U06-publisher-key-removed",
+      "profile": "ed25519",
+      "description": "Publisher key removed from the trust store",
+      "expected": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U07-key-for-other-package",
+      "profile": "ed25519",
+      "description": "Key trusted only for another package",
+      "expected": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U08-expected-version-differs",
+      "profile": "ed25519",
+      "description": "Valid bundle, verified with a different expected version",
+      "expected": {
+        "exit_code": 1,
+        "status": "METADATA_MISMATCH",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "METADATA_MISMATCH",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U09-artifact-renamed",
+      "profile": "ed25519",
+      "description": "Artifact file renamed, content unchanged",
+      "expected": {
+        "exit_code": 1,
+        "status": "METADATA_MISMATCH",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "METADATA_MISMATCH",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U10-duplicate-field",
+      "profile": "ed25519",
+      "description": "Bundle with a duplicate field",
+      "expected": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U10-wrong-type",
+      "profile": "ed25519",
+      "description": "Manifest artifact size is a boolean",
+      "expected": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U10-invalid-base64",
+      "profile": "ed25519",
+      "description": "Signature is not valid Base64",
+      "expected": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U10-manifest-too-large",
+      "profile": "ed25519",
+      "description": "Manifest larger than 16 KiB",
+      "expected": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "FORMAT_ERROR",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U11-unsupported-algorithm",
+      "profile": "ed25519",
+      "description": "Manifest algorithm is an unsupported profile",
+      "expected": {
+        "exit_code": 1,
+        "status": "UNSUPPORTED_ALGORITHM",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "UNSUPPORTED_ALGORITHM",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U12-untrusted-same-profile-key",
+      "profile": "ed25519",
+      "description": "Signed by another key of the same profile, not in the trust store",
+      "expected": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "actual": {
+        "exit_code": 1,
+        "status": "KEY_NOT_TRUSTED",
+        "valid": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U13-bundle-reformatted",
+      "profile": "ed25519",
+      "description": "Bundle whitespace and field order changed, Base64 strings kept",
+      "expected": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "actual": {
+        "exit_code": 0,
+        "status": "OK",
+        "valid": true
+      },
+      "passed": true
+    },
+    {
+      "id": "U14-sign-twice-rsa-pss-sha256",
+      "profile": "rsa-pss-sha256",
+      "description": "Identical manifest signed twice with the same key",
+      "expected": {
+        "both_valid": true,
+        "signatures_identical": false
+      },
+      "actual": {
+        "both_valid": true,
+        "signatures_identical": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U14-sign-twice-ecdsa-p256-sha256",
+      "profile": "ecdsa-p256-sha256",
+      "description": "Identical manifest signed twice with the same key",
+      "expected": {
+        "both_valid": true,
+        "signatures_identical": false
+      },
+      "actual": {
+        "both_valid": true,
+        "signatures_identical": false
+      },
+      "passed": true
+    },
+    {
+      "id": "U14-sign-twice-ed25519",
+      "profile": "ed25519",
+      "description": "Identical manifest signed twice with the same key",
+      "expected": {
+        "both_valid": true,
+        "signatures_identical": true
+      },
+      "actual": {
+        "both_valid": true,
+        "signatures_identical": true
+      },
+      "passed": true
+    }
+  ]
+}

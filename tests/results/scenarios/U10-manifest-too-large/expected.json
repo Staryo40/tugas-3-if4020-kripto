@@ -1,0 +1,6 @@
+{
+  "description": "Manifest larger than 16 KiB",
+  "exit_code": 1,
+  "status": "FORMAT_ERROR",
+  "valid": false
+}

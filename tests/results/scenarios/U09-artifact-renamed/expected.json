@@ -1,0 +1,6 @@
+{
+  "description": "Artifact file renamed, content unchanged",
+  "exit_code": 1,
+  "status": "METADATA_MISMATCH",
+  "valid": false
+}

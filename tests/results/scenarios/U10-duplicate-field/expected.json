@@ -1,0 +1,6 @@
+{
+  "description": "Bundle with a duplicate field",
+  "exit_code": 1,
+  "status": "FORMAT_ERROR",
+  "valid": false
+}

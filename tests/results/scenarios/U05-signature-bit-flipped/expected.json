@@ -1,0 +1,6 @@
+{
+  "description": "One signature bit flipped, same length, valid Base64",
+  "exit_code": 1,
+  "status": "INVALID_SIGNATURE",
+  "valid": false
+}

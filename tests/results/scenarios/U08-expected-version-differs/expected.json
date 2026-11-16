@@ -1,0 +1,6 @@
+{
+  "description": "Valid bundle, verified with a different expected version",
+  "exit_code": 1,
+  "status": "METADATA_MISMATCH",
+  "valid": false
+}

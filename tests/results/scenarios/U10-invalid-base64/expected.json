@@ -1,0 +1,6 @@
+{
+  "description": "Signature is not valid Base64",
+  "exit_code": 1,
+  "status": "FORMAT_ERROR",
+  "valid": false
+}

@@ -1,0 +1,6 @@
+{
+  "description": "One artifact byte changed, same size and name",
+  "exit_code": 1,
+  "status": "ARTIFACT_MISMATCH",
+  "valid": false
+}

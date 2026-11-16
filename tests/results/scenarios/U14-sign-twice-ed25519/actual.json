@@ -1,0 +1,15 @@
+{
+  "both_valid": true,
+  "signatures_identical": true,
+  "verify_1": {
+    "exit_code": 0,
+    "status": "OK",
+    "valid": true
+  },
+  "verify_2": {
+    "exit_code": 0,
+    "status": "OK",
+    "valid": true
+  },
+  "passed": true
+}

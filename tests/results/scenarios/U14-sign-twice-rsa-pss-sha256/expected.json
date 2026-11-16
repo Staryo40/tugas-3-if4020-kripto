@@ -1,0 +1,5 @@
+{
+  "description": "Identical manifest signed twice with the same key",
+  "both_valid": true,
+  "signatures_identical": false
+}

@@ -1,0 +1,6 @@
+{
+  "description": "Signed by another key of the same profile, not in the trust store",
+  "exit_code": 1,
+  "status": "KEY_NOT_TRUSTED",
+  "valid": false
+}

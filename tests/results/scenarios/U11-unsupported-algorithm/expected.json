@@ -1,0 +1,6 @@
+{
+  "description": "Manifest algorithm is an unsupported profile",
+  "exit_code": 1,
+  "status": "UNSUPPORTED_ALGORITHM",
+  "valid": false
+}

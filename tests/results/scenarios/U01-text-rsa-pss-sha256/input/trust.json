@@ -1,0 +1,13 @@
+{
+  "schema": "minisign-trust/v1",
+  "keys": [
+    {
+      "keyid": "87035df99fbb3f040b73e3dde493255b1ede74e061f2b681b7497bc7ce57e0d0",
+      "algorithm": "rsa-pss-sha256",
+      "public_key_pem": "-----BEGIN PUBLIC KEY-----\nMIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAyv+9TdfNUcHu9j6eoIZF\nGkHhyqGmNi2EfdNaVphS2t4OaAWGxsoA3tUafefGnF2IVeZ9Ng5Rn8+8Nw3KE1gW\nez2VPxd7w5VqRT0wWKS5BEzxdJt+TLITS9OfCyvks1bTEdPiMTs4kIVeW5kpLMLL\nybM9pF9gSoZKOE0GyZT1cYkQ/8xqKuO3unfpf4gzAzBaja5I9ZpjRBfQ7xBxdKa/\nidxpVDSbqmX/cF0CZ0mgl1Q9c6ifYQ6neH3ZcyPJGBlQDeEB3xhk1G+yeva/lV8P\nQ+v8fGgPkvq6A1Hy1INqA1w2l12O6lYawRwb1qP3TMDp9+mkBz+oKEl6wRMQcZy1\nl6ydd1Vozvl/lShcx1hWEsHiHiQgV2qMyR8MOdvYd86Vv44OpDLin3WiS7L1cU4G\nUk2St18mTo16sonx0bZdZRyDepRo45Bx+qkB0n9BXhmf7uR9JN//rOrBditNL9J3\nvuc0uQGMyV5/qesV2W9WHS2KrswVPw6Mu4KX0ySp64RxAgMBAAE=\n-----END PUBLIC KEY-----\n",
+      "packages": [
+        "contoh-app"
+      ]
+    }
+  ]
+}

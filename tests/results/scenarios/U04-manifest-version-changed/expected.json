@@ -1,0 +1,6 @@
+{
+  "description": "Manifest version changed (still canonical), old signature kept",
+  "exit_code": 1,
+  "status": "INVALID_SIGNATURE",
+  "valid": false
+}

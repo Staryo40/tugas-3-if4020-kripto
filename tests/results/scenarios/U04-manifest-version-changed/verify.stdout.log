@@ -1,0 +1,1 @@
+{"valid": false, "status": "INVALID_SIGNATURE", "message": "manifest signature is invalid", "algorithm": "ed25519", "keyid": "c029f9b4967f6efee395c90af71babfe3fb857c041db35d1de0d1363900138dd", "package": "contoh-app", "version": "1.0.1"}
